@@ -1,18 +1,24 @@
 from bytecode import instruction, is_False, is_True
 from bytecode import opcode as from_opcode
 class VM ():
+    DEFAULT_STACK_SIZE = 1000
+    DEFAULT_CALL_STACK_SIZE = 1000
     def __init__(self, code, main, datasize):
         self.globals = [None] * datasize
+
         self.code = code
-        self.stack = [None] * 1000
+        self.stack = [None] * VM.DEFAULT_STACK_SIZE
+        self.callstack = [None] * VM.DEFAULT_CALL_STACK_SIZE
+
         self.ip = main
         self.sp = -1
-        self.fp = -1
+        self.callsp = 1
+
         self.debug = True
         self.trace = "--------------------------------------\n"
         self.h = -1
     def _globals_dumps(self):
-        self.trace += "--------------------------------------\nGlobals:\n--------------------------------------\n"
+        self.trace += "--------------------------------------\nData memory:\n--------------------------------------\n"
         adr_format = '{:>03}'
         for i in range(len(self.globals)):
             if self.globals[i] != None:
