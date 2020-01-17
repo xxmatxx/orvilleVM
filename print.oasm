@@ -1,0 +1,4 @@
+ICONST 4 #test comment
+ICONST 5#test comment
+IADD #test comment
+PRINT#test comment
