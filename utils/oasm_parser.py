@@ -14,7 +14,7 @@ whitespace1p = char_from("\n\r\t ").desc("at lest 1 white space character").at_l
 whitespace0p = char_from("\n\r\t ").desc("zero or more white space characters").many()
 
 labelp = regex(r"[a-zA-Z0-9_]+:").map(Label).desc("label")
-varp = regex(r"\$[a-zA-Z0-9]+").map(Var).desc("var")
+varp = regex(r"\$[a-zA-Z0-9_]+").map(Var).desc("var")
 keywordp = regex(r"[a-zA-Z]+").map(Keyword).desc("keyword")
 integerp = regex(r"-?\d+").map(int).desc("integer")
 commentp = regex(r"#.*" + "\n").map(lambda a: []).desc("comment")

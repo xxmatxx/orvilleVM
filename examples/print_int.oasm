@@ -1,12 +1,13 @@
 START 23 10
-
+_print_int:
 PUSH 0
 STORE 1
 LOAD 0
 LOAD 1
 SUB
-JEQ 12
+JEQ $break1
 RET
+break1:
 LOAD 1
 DUP
 PRINT
@@ -15,10 +16,10 @@ ADD
 STORE 1
 JMP 4
 
-PUSH 3
+PUSH 100
 FRAME 2
-CALL 0 1
+CALL $_print_int 1
 
-PUSH 5
+PUSH 0
 FRAME 2
-CALL 0 1
+CALL $_print_int 1

@@ -12,7 +12,7 @@ Options:
 """
 from bytecode import instruction
 from docopt import docopt
-from utils.oasm_parser import *
+from utils.oasm_parser import parse, Keyword, Var, Label
 
 
 def create_symbol_table(code):
@@ -20,7 +20,7 @@ def create_symbol_table(code):
     index = 0
     while(index < len(code)):
         if isinstance(code[index], Label):
-            table[code[index].value] = index - 1
+            table[code[index].value] = index - 3
             del code[index]
         index +=1
     return table, code
@@ -48,8 +48,7 @@ def decode(code,stable):
 
 
 def decode_to_or1(code):
-    result = parse(string)
-    result = create_symbol_table(result)
+    result = create_symbol_table(code)
     result = decode(result[1],result[0])
     return result
 
@@ -71,17 +70,6 @@ def save_to_file(list, args):
 
 
 if __name__ == "__main__":
-    #arguments = docopt(__doc__, version='OrvilleVM assembler 0.0.1')
-    #save_to_file(decode_to_or1(parse(read_from_file(arguments["<input>"]))),arguments)
-
-    string ="""#coment
-START 0 0
-label1:
-ADD 
-label2:
-SUB 99 $label4
-label4: 
-MUL
-    """
-    print(decode_to_or1(string))
+    arguments = docopt(__doc__, version='OrvilleVM assembler 0.0.1')
+    save_to_file(decode_to_or1(parse(read_from_file(arguments["<input>"]))),arguments)
     

@@ -13,7 +13,9 @@ from oasm import *
 from vm import VM
 
 if __name__ == "__main__":
-    arguments = docopt(__doc__, version='OrvilleVM 0.0.1')
+    #arguments = docopt(__doc__, version='OrvilleVM 0.0.1')
+    
+    arguments = {"<input>":".\examples\print.oasm","-d":False}
     code = decode_to_or1(parse(read_from_file(arguments["<input>"])))
     vm = VM(code[2:],code[0],code[1])
     if arguments["-d"] == True:

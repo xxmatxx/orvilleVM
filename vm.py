@@ -170,9 +170,11 @@ class VM ():
                 self.ip = self.callstack[self.callsp].returnip
                 self.callsp -=1
             elif opcode == instruction("PRINT"):
-                value = self.stack[self.sp]
-                self.sp -= 1
-                print(value)
+                arg = self.code[self.ip]
+                self.ip += 1
+                value = self.stack[self.sp - arg + 1:self.sp]
+                self.sp -= arg
+                print("".join(chr(x) for x in value), end="")
             elif opcode == instruction("HALT"):
                 self.h = 0
             else:
@@ -183,24 +185,3 @@ class VM ():
         if(self.debug):
             self._globals_dumps()
         return self.h
-
-
-def main():
-    code = [
-    instruction("PUSH"),15,
-    instruction("PUSH"),10,
-    instruction("SWAP"),
-    instruction("DUP"),
-    instruction("JMP"),10,
-    instruction("PUSH"),10,
-    instruction("PRINT")
-    ]
-    vm = VM(code,0,10)
-    vm.cpu()
-    if vm.debug == True:
-        print(vm.trace)
-        
-    
-
-if __name__ == "__main__":
-    main()
