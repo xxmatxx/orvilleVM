@@ -10,46 +10,21 @@ Options:
   -h --help     Show this screen.
   -v --version  Show version.
 """
-
-from parsy import char_from, regex, char_from, generate
 from bytecode import instruction
 from docopt import docopt
-
-whitespace1p = char_from("\n\r\t ").desc("at lest 1 white space character").at_least(1)
-whitespace0p = char_from("\n\r\t ").desc("zero or more white space characters").many()
-
-keywordp = regex(r"[a-zA-Z]+").desc("keyword")
-integerp = regex(r"-?\d+").map(int).desc("integer")
-commentp = regex(r"#.*").map(lambda a: []).desc("commen")
-
-@generate
-def argp():
-    yield whitespace1p
-    result = yield integerp
-    return result
-
-@generate
-def line():
-    result1 = yield keywordp
-    result2 = yield argp.many()
-    yield whitespace0p
-    yield commentp.at_least(0)
-    yield whitespace0p
-    return [result1] + result2
-
-@generate
-def lines():
-    result = yield line.many()
-    flat_result = [item for sublist in result for item in sublist]
-    return flat_result
+from utils.oasm_parser import parse
 
 
-def parse(string):
-    return lines.parse(string)
-
-def decode(list):
+def decode_to_or1(code):
     result =[]
-    for item in list:
+
+    if code[0] == "START":
+        result.append(code[1])
+        result.append(code[2])
+    else:
+        raise BaseException("file dont have defined start of main function")
+
+    for item in code[3:]:
         if isinstance(item, str):
             result.append(instruction(item))
         else:
@@ -74,5 +49,12 @@ def save_to_file(list, args):
 
 
 if __name__ == "__main__":
-    arguments = docopt(__doc__, version='OrvilleVM assembler 0.0.1')
-    save_to_file(decode(parse(read_from_file(arguments["<input>"]))),arguments)
+    #arguments = docopt(__doc__, version='OrvilleVM assembler 0.0.1')
+    #save_to_file(decode_or1(parse(read_from_file(arguments["<input>"]))),arguments)
+    test ="""label1:
+test
+label2:
+test 1 2 3 4
+label4:
+"""
+    print(parse(test))
