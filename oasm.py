@@ -12,23 +12,45 @@ Options:
 """
 from bytecode import instruction
 from docopt import docopt
-from utils.oasm_parser import parse
+from utils.oasm_parser import *
 
 
-def decode_to_or1(code):
+def create_symbol_table(code):
+    table = {}
+    index = 0
+    while(index < len(code)):
+        if isinstance(code[index], Label):
+            table[code[index].value] = index - 1
+            del code[index]
+        index +=1
+    return table, code
+
+
+
+def decode(code,stable):
     result =[]
 
-    if code[0] == "START":
+    if code[0].value == "START":
         result.append(code[1])
         result.append(code[2])
     else:
         raise BaseException("file dont have defined start of main function")
 
     for item in code[3:]:
-        if isinstance(item, str):
-            result.append(instruction(item))
+        if isinstance(item, Keyword):
+            result.append(instruction(item.value))
+        elif isinstance(item, Var):
+            result.append(stable[item.value])
         else:
             result.append(item)
+    return result
+    
+
+
+def decode_to_or1(code):
+    result = parse(string)
+    result = create_symbol_table(result)
+    result = decode(result[1],result[0])
     return result
 
 def read_from_file(scr):
@@ -50,11 +72,16 @@ def save_to_file(list, args):
 
 if __name__ == "__main__":
     #arguments = docopt(__doc__, version='OrvilleVM assembler 0.0.1')
-    #save_to_file(decode_or1(parse(read_from_file(arguments["<input>"]))),arguments)
-    test ="""label1:
-test
+    #save_to_file(decode_to_or1(parse(read_from_file(arguments["<input>"]))),arguments)
+
+    string ="""#coment
+START 0 0
+label1:
+ADD 
 label2:
-test 1 2 3 4
-label4:
-"""
-    print(parse(test))
+SUB 99 $label4
+label4: 
+MUL
+    """
+    print(decode_to_or1(string))
+    

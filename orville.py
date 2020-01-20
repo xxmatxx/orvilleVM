@@ -14,7 +14,7 @@ from vm import VM
 
 if __name__ == "__main__":
     arguments = docopt(__doc__, version='OrvilleVM 0.0.1')
-    code = decode_or1(parse(read_from_file(arguments["<input>"])))
+    code = decode_to_or1(parse(read_from_file(arguments["<input>"])))
     vm = VM(code[2:],code[0],code[1])
     if arguments["-d"] == True:
         vm.debug = True
