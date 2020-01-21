@@ -26,7 +26,6 @@ def create_symbol_table(code):
     return table, code
 
 
-
 def decode(code,stable):
     result =[]
 
@@ -66,7 +65,7 @@ def save_to_file(list, args):
                 file.write(str(item))
                 file.write(" ")
     else:
-        print("binary mode is not implemented")
+        raise BaseException("binary mode is not implemented")
 
 
 if __name__ == "__main__":

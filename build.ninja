@@ -1,0 +1,14 @@
+builddir = builddir
+flags = -d
+asm = C:\Orville\oasm.py
+exec = C:\Orville\orville.py
+
+rule or1
+  command = python $asm $in builddir\$out $flags
+
+rule run
+    command = python $exec or1 builddir\$in
+
+build print.or1: or1 examples\print.oasm
+
+build run file: run print.or1

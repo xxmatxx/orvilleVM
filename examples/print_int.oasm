@@ -1,4 +1,4 @@
-START 23 10
+START $_main 10
 _print_int:
 PUSH 0
 STORE 1
@@ -15,7 +15,7 @@ PUSH 1
 ADD
 STORE 1
 JMP 4
-
+_main:
 PUSH 100
 FRAME 2
 CALL $_print_int 1
