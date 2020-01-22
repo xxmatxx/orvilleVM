@@ -6,7 +6,7 @@ class Variable():
 
 class Function():
     def __init__(self):
-        self.stable = None
+        self.sym_table = None
 
 
 class SymbolTable():
@@ -52,14 +52,13 @@ class Compiler():
     def compile_form(self,ast):
         temp = ast.copy()
         temp.reverse()
-        result = ""
         for ast in temp:
             if isinstance(ast, list):
-                result += self.compile_form(ast)
+                result = self.compile_form(ast)
             elif isinstance(ast, str):
-                result += self.compile_primitive(ast)
+                result = self.compile_primitive(ast)
             elif isinstance(ast, int):
-                result += self.compile_int(ast)
+                result = self.compile_int(ast)
         return result
 
     def compile(self,ast):
