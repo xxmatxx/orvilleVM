@@ -1,26 +1,23 @@
-class Variable():
-    def __init__(self, vtype, value):
-        self.type = vtype
-        self.value = value
+"""
+Lisp compiler for OrvilleVM
 
+Usage:
+    compiler.py <input> <output>
+    compiler.py -h | --help
+    compiler.py -v | --version
 
-class Function():
-    def __init__(self):
-        self.sym_table = None
-
-
-class SymbolTable():
-    def __init__(self):
-        data = {}
-    def set(self):
-        pass
-    def get(self):
-        pass
+Options:
+  -h --help     Show this screen.
+  -v --version  Show version.
+"""
+from utils.lisp_parser import read_str as parse,Symbol
+from utils.io import read_from_file
+from docopt import docopt
 
 
 class Compiler():
     def __init__(self):
-        self.result = ""
+        pass
 
 
     def compile_int(self,i):
@@ -50,21 +47,23 @@ class Compiler():
     
 
     def compile_form(self,ast):
+        result = ""
         temp = ast.copy()
         temp.reverse()
         for ast in temp:
             if isinstance(ast, list):
-                result = self.compile_form(ast)
-            elif isinstance(ast, str):
-                result = self.compile_primitive(ast)
+                result += self.compile_form(ast)
+            elif isinstance(ast, Symbol):
+                result += self.compile_primitive(ast)
             elif isinstance(ast, int):
-                result = self.compile_int(ast)
+                result += self.compile_int(ast)
         return result
 
     def compile(self,ast):
+        result = ""
         if isinstance(ast, list):
             result = self.compile_form(ast)
-        elif isinstance(ast, str):
+        elif isinstance(ast, Symbol):
             result = self.compile_primitive(ast)
         elif isinstance(ast, int):
             result = self.compile_int(ast)
@@ -80,10 +79,16 @@ class Compiler():
 
 
 
-
-c = Compiler()
-result = c.run(5)
-print(result)
+if __name__ == "__main__":
+    arguments = docopt(__doc__, version='OrvilleVM assembler 0.0.1')
+    c = Compiler()
+    
+    code = read_from_file(arguments["<input>"])
+    print(code)
+    ast = parse(code)
+    print(ast)
+    result = c.run(ast)
+    print(result)
 
 # 5
 

@@ -13,6 +13,7 @@ Options:
 from bytecode import instruction
 from docopt import docopt
 from utils.oasm_parser import parse, Keyword, Var, Label
+from utils.io import read_from_file, save_or1_to_file
 
 
 def create_symbol_table(code):
@@ -45,30 +46,13 @@ def decode(code,stable):
     return result
     
 
-
 def decode_to_or1(code):
     result = create_symbol_table(code)
     result = decode(result[1],result[0])
     return result
 
-def read_from_file(scr):
-    with open(scr) as file:
-        data = file.read()
-    return data
-
-def save_to_file(list, args):
-    debug = args["-d"]
-    if debug == True:
-        src = args["<output>"]
-        with open(src, "w") as file:
-            for item in list:
-                file.write(str(item))
-                file.write(" ")
-    else:
-        raise BaseException("binary mode is not implemented")
-
 
 if __name__ == "__main__":
     arguments = docopt(__doc__, version='OrvilleVM assembler 0.0.1')
-    save_to_file(decode_to_or1(parse(read_from_file(arguments["<input>"]))),arguments)
+    save_or1_to_file(decode_to_or1(parse(read_from_file(arguments["<input>"]))),arguments)
     
