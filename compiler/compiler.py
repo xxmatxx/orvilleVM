@@ -62,11 +62,19 @@ class Compiler():
                 result += self.compile_int(ast)
         return result
 
+    def compile(self,ast):
+        if isinstance(ast, list):
+            result = self.compile_form(ast)
+        elif isinstance(ast, str):
+            result = self.compile_primitive(ast)
+        elif isinstance(ast, int):
+            result = self.compile_int(ast)
+        return result
 
     def run(self, ast):
         result = ""
         result += self.compile_header(0,0)
-        result += self.compile_form(ast)
+        result += self.compile(ast)
         result += self.compile_footer()
         return result
 
@@ -75,8 +83,9 @@ class Compiler():
 
 
 c = Compiler()
-result = c.run(["/",["*",5,10],5])
+result = c.run(5)
 print(result)
+
 # 5
 
 #(+ 10 5)
