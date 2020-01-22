@@ -170,11 +170,10 @@ class VM ():
                 self.ip = self.callstack[self.callsp].returnip
                 self.callsp -=1
             elif opcode == instruction("PRINT"):
-                arg = self.code[self.ip]
                 self.ip += 1
-                value = self.stack[self.sp - arg + 1:self.sp]
-                self.sp -= arg
-                print("".join(chr(x) for x in value), end="")
+                value = self.stack[self.sp]
+                self.sp -= 1
+                print(value)
             elif opcode == instruction("HALT"):
                 self.h = 0
             else:
