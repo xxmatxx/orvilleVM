@@ -2,7 +2,7 @@ builddir = builddir
 flags = -d
 asm = C:\Orville\oasm.py
 exec = C:\Orville\orville.py
-comp = 
+comp = C:\Orville\compiler.py
 
 rule compiler
   command = python $comp $in builddir\$out
@@ -10,12 +10,11 @@ rule compiler
 rule assembler
   command = python $asm builddir\$in builddir\$out $flags
 
-
 rule run
     command = python $exec or1 builddir\$in
 
-build add.asm: compiler examples\lisp.sl
+build add.oasm: compiler examples\lisp.sl
 
 build add.or1: assembler add.oasm
 
-build run file: run print.or1
+build execute: run add.or1

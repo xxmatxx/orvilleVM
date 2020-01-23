@@ -11,7 +11,7 @@ Options:
   -v --version  Show version.
 """
 from utils.lisp_parser import read_str as parse,Symbol
-from utils.io import read_from_file
+from utils.io import read_from_file, save_oasm_to_file
 from docopt import docopt
 
 
@@ -48,15 +48,14 @@ class Compiler():
 
     def compile_form(self,ast):
         result = ""
-        temp = ast.copy()
-        temp.reverse()
-        for ast in temp:
-            if isinstance(ast, list):
-                result += self.compile_form(ast)
-            elif isinstance(ast, Symbol):
-                result += self.compile_primitive(ast)
-            elif isinstance(ast, int):
-                result += self.compile_int(ast)
+        args = ast[1:]
+        for arg in args:
+            if isinstance(arg,list):
+                result += self.compile_form(arg)
+            if isinstance(arg,int):
+                result += self.compile_int(arg)
+        fn = ast[0]
+        result += self.compile_primitive(fn)
         return result
 
     def compile(self,ast):
@@ -75,20 +74,16 @@ class Compiler():
         result += self.compile(ast)
         result += self.compile_footer()
         return result
-
-
-
+    
 
 if __name__ == "__main__":
     arguments = docopt(__doc__, version='OrvilleVM assembler 0.0.1')
     c = Compiler()
-    
     code = read_from_file(arguments["<input>"])
-    print(code)
     ast = parse(code)
-    print(ast)
     result = c.run(ast)
     print(result)
+    save_oasm_to_file(result,arguments)
 
 # 5
 
