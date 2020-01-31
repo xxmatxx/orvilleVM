@@ -1,3 +1,4 @@
+from enum import Enum
 bytecode = {
     "ADD":{"opcode":1,"narg":0},
     "SUB":{"opcode":2,"narg":0},
@@ -22,6 +23,36 @@ bytecode = {
     "HALT":{"opcode":21,"narg":0}
 }
 
+class Type(Enum):
+    INT = 1
+    CHAR = 2
+    BOOL = 3
+
+
+class Value():
+    def __init__(self,value,typ):
+        self.value = value
+        self.type = typ
+    def __eq__(self, other):
+        if self.type == other.type and self.value == other.value:
+            return True
+        else:
+            return False
+    def __add__(self, other):
+        pass
+    def __sub__(self, other):
+        pass
+    def __mul__(self, other):
+        pass
+    def __div__(self, other):
+        pass
+    def __mod__(self, other):
+        pass
+    def __int__(self):
+        pass
+
+
+
 class Context():
     def __init__(self, returnip, nlocals):
         self.returnip = returnip
@@ -36,8 +67,8 @@ def opcode(i):
             return (key,value["narg"])
 
 def is_True(i):
-    return i > 0
+    return i >= 0
 
 
 def is_False(i):
-    return i <= 0
+    return i < 0
